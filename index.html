@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Registro de Asistencia</title>
+</head>
+<body>
+  <h1>Registro de Asistencia</h1>
+  <input type="text" id="qrData" placeholder="Escanea el QR aquí">
+  <button onclick="sendData()">Enviar Asistencia</button>
+
+  <script>
+    function sendData() {
+      var qrData = document.getElementById("qrData").value;
+      var lines = qrData.split("\n");  // Divide las líneas del QR
+
+      var nombre = lines[0].trim();    // Primera línea: Nombre
+      var ci = lines[2].trim();        // Tercera línea: CI
+
+      // Preparar los datos en formato JSON
+      var data = {
+        "nombre": nombre,
+        "ci": ci
+      };
+
+      // Enviar los datos a la API
+      fetch('https://script.google.com/macros/s/AKfycbz5YR7-139lhflm1hfShEE4Z6_MPAoHOZ0io61bpW9ZDU7ulb83KdOYUustqLx5bYo2/exec', {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(response => response.text())
+      .then(result => alert(result))
+      .catch(error => console.error('Error:', error));
+    }
+  </script>
+</body>
+</html>
